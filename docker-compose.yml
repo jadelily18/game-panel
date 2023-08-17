@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  backend:
+    image: game-panel-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - RUST_LOG=debug
