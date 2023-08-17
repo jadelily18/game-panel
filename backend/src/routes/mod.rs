@@ -4,6 +4,10 @@ use rand::prelude::*;
 
 #[get("/rand")]
 pub async fn rand_number() -> Result<HttpResponse, Error> {
-    Ok(HttpResponse::Ok().body(rand::thread_rng().gen_range(1..101).to_string()))
+    let rand_number = rand::thread_rng().gen_range(1..101);
+
+    debug!("Requested number: {}", rand_number.clone().to_string());
+
+    Ok(HttpResponse::Ok().body(rand_number.to_string()))
 }
 

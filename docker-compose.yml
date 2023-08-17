@@ -4,9 +4,11 @@ services:
     container_name: panel-frontend
     image: game-panel-frontend
     ports:
-      - "3000:3000"
+      - "5173:3000"
     links:
       - "backend"
+    environment:
+      - PUBLIC_BACKEND_URL=http://backend:8080
   backend:
     container_name: panel-backend
     image: game-panel-backend
