@@ -1,8 +1,14 @@
 version: "3.8"
 services:
-  backend:
-    image: game-panel-backend
+  frontend:
+    container_name: panel-frontend
+    image: game-panel-frontend
     ports:
-      - "8080:8080"
+      - "3000:3000"
+    links:
+      - "backend"
+  backend:
+    container_name: panel-backend
+    image: game-panel-backend
     environment:
       - RUST_LOG=debug
