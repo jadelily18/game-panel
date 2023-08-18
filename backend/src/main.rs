@@ -14,19 +14,21 @@ async fn root() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     match dotenvy::dotenv() {
-        Ok(_) => (),
+        Ok(_) => {
+            warn!(".env file found. You should probably be using a Docker Compose file instead.");
+        },
         Err(_) => ()
     }
 
     pretty_env_logger::init();
 
-    info!("Starting server on port 8080!");
+    info!("Starting Actix web server!");
 
     HttpServer::new(move || {
         App::new()
             .wrap(
                 Cors::default()
-                    .allow_any_origin() // TODO: Figure out CORS. This should not make it into production!
+                    .allow_any_origin() // TODO: Figure out CORS. This should (probably?) not make it into production!
             )
             .service(root)
             .service(routes::rand_number)
