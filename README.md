@@ -1,6 +1,6 @@
 # Unnamed Game Panel
 
-An unnamed game panel, specifically focusing on Minecraft for now.
+An unnamed, work-in-progress game panel, specifically focusing on Minecraft for now.
 
 ## License
 

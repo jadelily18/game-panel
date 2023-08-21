@@ -9,8 +9,32 @@ services:
       - "backend"
     environment:
       - PUBLIC_BACKEND_URL=http://backend:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   backend:
     container_name: panel-backend
     image: game-panel-backend
+    ports:
+      - "8080:8080" # Currently only for development purposes.
     environment:
+      - DATABASE_URL=mariadb://game-panel-db:3306/gamepanel
       - RUST_LOG=debug
+    links:
+      - "game-panel-db"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  game-panel-db:
+    image: yobasystems/alpine-mariadb
+    container_name: game-panel-db
+    restart: unless-stopped
+    environment: # Only for development purposes. Should be changed in production.
+      MYSQL_DATABASE: gamepanel
+      MYSQL_USER: gamepanel
+      MYSQL_PASSWORD: gamepanel
+      MYSQL_ROOT_PASSWORD: gamepanel
+    ports:
+      - 3306:3306 # Only for development purposes.
+    volumes:
+      - db-volume:/var/lib/mysql
+volumes:
+  db-volume:

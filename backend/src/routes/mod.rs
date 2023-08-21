@@ -1,6 +1,9 @@
 use actix_web::{get, HttpResponse, Error};
 use rand::prelude::*;
 
+pub mod container;
+pub mod models;
+
 
 #[get("/rand")]
 pub async fn rand_number() -> Result<HttpResponse, Error> {

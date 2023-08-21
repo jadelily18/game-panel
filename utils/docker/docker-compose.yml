@@ -1,0 +1,24 @@
+version: "3.8"
+name: game-panel-dev
+services:
+  game-panel-db:
+    image: yobasystems/alpine-mariadb
+    container_name: game-panel-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: gamepanel
+      MYSQL_USER: gamepanel
+      MYSQL_PASSWORD: gamepanel
+      MYSQL_ROOT_PASSWORD: gamepanel
+    ports:
+      - 3306:3306 # Only for development purposes
+    volumes:
+      - db-volume:/var/lib/mysql
+  game-panel-adminer:
+    image: adminer
+    container_name: game-panel-adminer
+    restart: unless-stopped
+    ports:
+      - 6943:8080
+volumes:
+  db-volume:

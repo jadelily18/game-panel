@@ -1,8 +1,13 @@
 extern crate pretty_env_logger;
 #[macro_use] extern crate log;
 use actix_cors::Cors;
-use actix_web::{get, App, HttpServer, Responder};
+use actix_web::{get, App, HttpServer, Responder, web};
 
+use routes::{
+    container::*
+};
+
+mod database;
 mod routes;
 
 #[get("/")]
@@ -32,6 +37,10 @@ async fn main() -> std::io::Result<()> {
             )
             .service(root)
             .service(routes::rand_number)
+            .service(
+                web::scope("/container")
+                    .service(create_container)
+            )
     })
     .bind(("0.0.0.0", 8080))?
     .run()
