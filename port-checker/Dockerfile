@@ -6,7 +6,7 @@
 FROM messense/rust-musl-cross:x86_64-musl as chef
 
 RUN cargo install cargo-chef
-WORKDIR /panel-backend
+WORKDIR /panel-port-checker
 
 # Planner
 FROM chef as planner
@@ -17,10 +17,7 @@ RUN cargo chef prepare --recipe-path recipe.json
 # Builder
 FROM chef as builder 
 
-RUN apt-get update -y
-RUN apt-get install -y pkg-config libssl-dev
-
-COPY --from=planner /panel-backend/recipe.json recipe.json
+COPY --from=planner /panel-port-checker/recipe.json recipe.json
 
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path recipe.json
@@ -31,11 +28,7 @@ RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # Run :)
 FROM scratch
-ENV IS_DOCKER_ENV=true
-
-COPY --from=builder /panel-backend/target/x86_64-unknown-linux-musl/release/panel-backend /usr/local/bin/panel-backend
-
-EXPOSE 8080
-
-ENTRYPOINT [ "panel-backend" ]
+COPY --from=builder /panel-port-checker/target/x86_64-unknown-linux-musl/release/panel-port-checker /usr/local/bin/panel-port-checker
+EXPOSE 3434
+ENTRYPOINT [ "panel-port-checker" ]
 

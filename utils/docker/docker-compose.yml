@@ -1,9 +1,9 @@
 version: "3.8"
 name: game-panel-dev
 services:
-  game-panel-db:
+  game-panel-db-dev:
     image: yobasystems/alpine-mariadb
-    container_name: game-panel-db
+    container_name: game-panel-db-dev
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: gamepanel

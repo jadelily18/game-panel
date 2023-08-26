@@ -2,6 +2,7 @@ version: "3.8"
 services:
   frontend:
     container_name: panel-frontend
+    network_mode: bridge
     image: game-panel-frontend
     ports:
       - "5173:3000"
@@ -13,18 +14,20 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   backend:
     container_name: panel-backend
+    network_mode: bridge
     image: game-panel-backend
     ports:
       - "8080:8080" # Currently only for development purposes.
     environment:
-      - DATABASE_URL=mariadb://game-panel-db:3306/gamepanel
-      - RUST_LOG=debug
+      - DATABASE_URL=mariadb://gamepanel:gamepanel@localhost:3307/gamepanel
+      - RUST_LOG=info
     links:
       - "game-panel-db"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   game-panel-db:
     image: yobasystems/alpine-mariadb
+    network_mode: bridge
     container_name: game-panel-db
     restart: unless-stopped
     environment: # Only for development purposes. Should be changed in production.
@@ -32,8 +35,8 @@ services:
       MYSQL_USER: gamepanel
       MYSQL_PASSWORD: gamepanel
       MYSQL_ROOT_PASSWORD: gamepanel
-    ports:
-      - 3306:3306 # Only for development purposes.
+    # ports:
+    #   - 3307:3306 # Only for development purposes.
     volumes:
       - db-volume:/var/lib/mysql
 volumes:
